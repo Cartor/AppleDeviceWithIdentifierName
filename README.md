@@ -2,7 +2,7 @@
 Apple device's name map model Identifier (Mac)
 
 
-## MacBook Air
+## [MacBook Air](json/MacBook_Air.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT201862
 
@@ -21,7 +21,7 @@ Apple device's name map model Identifier (Mac)
 | MacBookAir5,1 | MacBook Air (11-inch, Mid 2012)  |
 
 
-## iMac
+## [iMac](json/iMac.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT201634
 
@@ -47,7 +47,7 @@ Apple device's name map model Identifier (Mac)
 | iMac17,1 | iMac (Retina 5K, 27-inch, Late 2015)  |
 
 
-## MacBook Pro
+## [MacBook Pro](json/MacBook_Pro.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT201300
 
@@ -80,7 +80,7 @@ Apple device's name map model Identifier (Mac)
 | MacBookPro9,2 | MacBook Pro (13-inch, Mid 2012)  |
 
 
-## Mac mini
+## [Mac mini](json/Mac_mini.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT201894
 
@@ -95,7 +95,7 @@ Apple device's name map model Identifier (Mac)
 | Macmini6,2 | Mac mini (Late 2012)  |
 
 
-## Mac Pro
+## [Mac Pro](json/Mac_Pro.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT202888
 
@@ -106,7 +106,7 @@ Apple device's name map model Identifier (Mac)
 | MacPro5,1 | Mac Pro Server (Mid 2010/Mid 2010/Mid 2012)  |
 
 
-## MacBook
+## [MacBook](json/MacBook.json)
 
 > Tech Specs: https://support.apple.com/en-us/HT201608
 
