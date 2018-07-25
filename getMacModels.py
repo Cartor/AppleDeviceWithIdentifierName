@@ -2,6 +2,9 @@ import urllib2
 import requests as rq
 from bs4 import BeautifulSoup
 import datetime, json
+import re
+
+import settings
 
 def get_model_info(model):
 	infos = model.find_all('p')
@@ -59,6 +62,54 @@ def parseHtml(dom):
 
 	return models
 
+def get_model_info1(model):
+	infos = model.splitlines()
+	#print infos
+
+	for index in range(len(infos)):
+		if index == 0:
+			_deviceName = infos[index].strip().replace('\n ', '').replace('\r', '')
+		else:
+			regex = "Model Identifier:"
+			if re.match(regex, infos[index]):
+				_identifierName = infos[index].replace('\n', '').replace('\r', '')[len("Model Identifier:"):].strip()
+				
+				#print _deviceName
+				#print _identifierName
+				return [_identifierName, _deviceName]
+
+	return []
+
+def parseHtml1(dom):
+	soup = BeautifulSoup(dom, 'html.parser')
+	divs = soup.find_all('div', 'extra-react-div')
+	models = {}
+
+	for d in divs:
+		p_items = d.find_all('p')
+		for index in range(len(p_items)):
+			if (index+1) % 3 == 0:
+				modelInfo = get_model_info1(p_items[index-1].text)
+				#print modelInfo
+				
+				if len(modelInfo) > 0:
+					#print modelInfo
+					if modelInfo[0] in models:
+						ModelName = modelInfo[1][:modelInfo[1].find('(')]
+
+						ModelInfo1 = modelInfo[1][modelInfo[1].find('(') + 1:modelInfo[1].find(')')]
+						ModelInfo2 = models[modelInfo[0]][models[modelInfo[0]].find('(') + 1:models[modelInfo[0]].find(')')]
+						splitStr = ','
+
+						if len(ModelInfo1.split(splitStr)) <= 0:
+							splitStr = ' '
+
+						models[modelInfo[0]] = ModelName.strip() + " (" + parseDupInfo(ModelInfo1, ModelInfo2, ',') + ")"
+					else:
+						models[modelInfo[0]] = modelInfo[1]
+
+	return models
+
 def getHtml(url):
 	#file = open("ELTA_HTML.htm", "r") 
 	#return file.read() 
@@ -80,31 +131,15 @@ def writeJson(filename, data):
 		json.dump(data, outfile)
 
 def main():
-	MacInfoURL = {
-		#"iPod touch": "https://support.apple.com/en-us/HT204217",
-		#"iPad": "https://support.apple.com/en-us/HT201471",
-		#"Apple Watch": "https://support.apple.com/en-us/HT204507",
-		#"Apple TV": "https://support.apple.com/en-us/HT200008",
-		"MacBook Pro": "https://support.apple.com/en-us/HT201300",
-		"MacBook Air": "https://support.apple.com/en-us/HT201862",
-		"MacBook": "https://support.apple.com/en-us/HT201608",
-		"iMac": "https://support.apple.com/en-us/HT201634",
-		"Mac mini": "https://support.apple.com/en-us/HT201894",
-		"Mac Pro": "https://support.apple.com/en-us/HT202888"
-	}
-
-	for attr, value in MacInfoURL.iteritems():
+	for attr, value in settings.MacInfoURL.iteritems():
 		#print attr, value
-		html_doc = getHtml(value)
-		models = parseHtml(html_doc)
+		html_doc = getHtml(value[0])
+		if value[1] == 0:
+			models = parseHtml(html_doc)
+		else:
+			models = parseHtml1(html_doc)
 		print models
 		writeJson("json/" + attr.replace(' ', '_') + ".json", models)
-
-	#url = "http://support.apple.com/kb/ht4132" 
-	#response = getHtml(url)
-	#html_doc = getHtml(url)
-
-	#get_schedule(html_doc)
 
 if __name__ == "__main__":
     main()
